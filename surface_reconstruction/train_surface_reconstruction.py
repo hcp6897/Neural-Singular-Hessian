@@ -2,6 +2,7 @@ import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import numpy as np
 import torch
 import torch.optim as optim
@@ -31,8 +32,6 @@ device = 'cpu' if not torch.cuda.is_available() else 'cuda'
 # get data loaders
 utils.same_seed(args.seed)
 train_set = dataset.ReconDataset(args.data_path, args.n_points, args.n_samples, args.grid_res)
-
-
 train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=args.batch_size, shuffle=True, num_workers=4,
                                                pin_memory=True)
 # get model
@@ -50,8 +49,9 @@ optimizer = optim.Adam(net.parameters(), lr=args.lr, weight_decay=0.0)
 n_iterations = args.n_samples * (args.num_epochs)
 print('n_iterations: ', n_iterations)
 
-net.to(device)
+# net.to(device)
 
+# Loss 
 criterion = MorseLoss(weights=args.loss_weights, loss_type=args.loss_type, div_decay=args.morse_decay,
                       div_type=args.morse_type, bidirectional_morse=args.bidirectional_morse, udf=args.udf)
 
